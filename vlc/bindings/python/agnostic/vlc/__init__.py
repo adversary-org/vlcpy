@@ -39,14 +39,14 @@ if cmd_folder not in sys.path:
 if sys.platform == "darwin":
     vlcx = "VLC"
     topdir = os.path.abspath("/Applications/")
-elif sys.platform == "win32":
+elif sys.platform == "win32" or "cygwin":
     vlcx = "vlc.exe"
     topdir = os.path.abspath("C:\\Program Files\\")
-elif sys.platform == "linux2":
+elif sys.platform == "linux" or "linux2":
     topdir = os.path.abspath("/")
     vlcx = "vlc"
 else:
-    vlcx = "vlc"  # probably
+    vlcx = "vlc"  # probably (includes Solaris, SunOS and assorted BSDs)
     topdir = os.path.abspath("/")
 
 def vlcpath(vlcx, topdir):
@@ -55,7 +55,20 @@ def vlcpath(vlcx, topdir):
             return os.path.join(root, vlcx)
 
 vlcexec = vlcpath(vlcx, topdir)
-vlc_ver = subprocess.Popen([vlcexec, "--version"], stdout=subprocess.PIPE).communicate()[0]
+vlcepath = vlcexec[0:(len(vlcexec) - len(vlcx))]
+
+# Include this along witn Windows lib locations when dir structure
+# confirmed for Windows systems.  Linux and others should already be
+# using shared libraries.
+#
+#if sys.platform == "darwin":
+#    sys.path.insert(0, vlcepath)
+#    sys.path.insert(0, vlcepath + "include/vlc/")
+#    sys.path.insert(0, vlcepath + "lib/")
+#    sys.path.insert(0, vlcepath + "plugins/")
+
+vlc_ver = subprocess.Popen([vlcexec, "--version"],
+                           stdout=subprocess.PIPE).communicate()[0]
 vlcver = vlc_ver.split(" ")[2]
 
 if vlcver.startswith(b"1.0"):
