@@ -2,11 +2,16 @@
 
 # VLC and Python Version checker.
 #
-# Author: Ben McGinnes <ben@adversary.org>
+# Author:  Ben McGinnes <ben@adversary.org>
+# GPG Key:  0x321E4E2373590E5D
 #
-# Provided to the VideoLAN Project under the terms of the LGPL 2.1 or
-# any later version, may optionally be licensed under the terms of the
-# GPL 3.0 or later (dual licensed).
+# This code is provided under the terms of the LGPL 2.1 or any later
+# version (for compliance with existing VLC licencing), it may
+# optionally be licensed under the terms of the GPL 3.0 or or any
+# later version and the WTFNMFPL 1.0 or later (multi-licensing).
+# Also, some code has been incorporated from stackoverflow.com
+# (multiple authors and threads) and is thus attributable to the
+# Creative Commons CC BY-SA 2.5 license.
 
 import os
 import os.path
@@ -16,9 +21,19 @@ import inspect
 
 # Just in case people are using Python 3, sets VLC module path:
 
-cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspect.getfile( inspect.currentframe() ))[0]))
+inspector = inspect.getfile(inspect.currentframe())
+cmd_folder = os.path.realpath(os.path.abspath(os.path.split(inspector)[0]))
 if cmd_folder not in sys.path:
     sys.path.insert(0, cmd_folder)
+
+# The above code block was adapted from posts to stackoverflow.com,
+# but may have its origins elsewhere and so may or may not be
+# addressed with a Creative Commons license.
+#
+# The origin for this code is *believed* (not certain, it's spread
+# pretty far now, but this is where I got it) to be:
+#
+# http://stackoverflow.com/questions/279237/import-a-module-from-a-relative-path/6098238#6098238
 
 
 if sys.platform == "darwin":
